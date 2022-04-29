@@ -1,24 +1,16 @@
-# This is a basic workflow to help you get started with Actions
-
-name: Publish to CPanel
-
-on:
-  push:
-    branches: 
-      - main
-      
+on: push
+name: Deploy website on push
 jobs:
-  FTP-Deploy-Action:
-      name: FTP-Deploy-Action
-      runs-on: ubuntu-latest
-      steps:
-      - uses:  
-          actions/checkout@v3 
-          with
-            fetch-depth:2
-      - name: FTP-Deploy-Action
-        uses: Marcos/FTP-Deploy-Action@3.1.1
-        with:
-          ftp-server: ${{secrets.ftpserver}}
-          ftp-username: ${{secrets.ftpusername}}
-          ftp-password: ${{secrets.ftp_password}}
+  web-deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: Get latest code
+      uses: actions/checkout@v2
+    
+    - name: Sync files
+      uses: SamKirkland/FTP-Deploy-Action@4.3.0
+      with:
+        server: ${{ secrets.FTPSERVER }}
+        username: ${{ secrets.FTPUSERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
